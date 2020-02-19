@@ -8,7 +8,7 @@ export default new Vuex.Store({
     notes: []
   },
   getters: {
-    getNotes: state => state.notes,
+    getNotes: state => state.notes.reverse(),
     getNote: state => id => state.notes.find(note => note.id === id)
   },
   mutations: {

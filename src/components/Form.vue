@@ -43,22 +43,54 @@
 </template>
 
 <script>
+import short from 'short-uuid'
 export default {
   name: 'Form',
+  props: {
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    note: {
+      type: Object,
+      default: () => ({
+        id: '',
+        title: '',
+        content: ''
+      })
+    }
+  },
   data() {
     return {
       title: '',
       content: ''
     }
   },
+  created() {
+    this.assignVuales()
+  },
   methods: {
     add() {
       this.$store.dispatch('addNote', {
-        id: '?',
+        id: short.generate(),
         title: this.title,
         content: this.content
       })
       this.$router.push('/')
+    },
+    save() {
+      this.$store.dispatch('removeNote', this.note.id)
+      this.$store.dispatch('addNote', {
+        id: this.note.id,
+        title: this.title,
+        content: this.content
+      })
+      this.$router.push('/')
+    },
+    async assignVuales() {
+      await this.$nextTick
+      this.title = this.note.title
+      this.content = this.note.content
     }
   }
 }
